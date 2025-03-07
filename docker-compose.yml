@@ -1,0 +1,68 @@
+services:
+  # PHP
+  app:
+    build:
+      context: ./docker/app
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    container_name: wordbook-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./laravel:/var/www/html
+      - ./docker/app/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - wordbook-network
+    depends_on:
+      - postgres
+
+  # Webサーバー (Nginx)
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: wordbook-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./laravel:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - wordbook-network
+    depends_on:
+      - app
+
+  # Node.js (React ビルド用)
+  node:
+    image: node:18-alpine
+    container_name: wordbook-node
+    working_dir: /app
+    volumes:
+      - ./laravel:/app
+    networks:
+      - wordbook-network
+    tty: true
+
+  # PostgreSQL (開発用DB)
+  postgres:
+    image: postgres:14-alpine
+    container_name: wordbook-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_DATABASE:-wordbook}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    networks:
+      - wordbook-network
+
+networks:
+  wordbook-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
