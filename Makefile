@@ -38,11 +38,11 @@ web:
 node:
 	@$(DC) exec node sh
 
-db.login:
-	@$(DC) exec db bash
+pg:
+	@$(DC) exec postgres bash
 
-db.console:
-	@$(DC) exec db mysql -uphper -psecret laravel
+pg.console:
+	@$(DC) exec postgres psql -U postgres -d wordbook
 
 cache clear:
 	@$(DC) exec app php artisan config:clear

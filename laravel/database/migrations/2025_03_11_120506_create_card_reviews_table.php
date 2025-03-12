@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('card_id')->constrained('cards');
-            $table->foreignId('study_session_id')->constrained('study_sessions');
+            $table->foreignId('deck_study_session_id')->constrained('deck_study_sessions');
 
             $table->boolean('is_correct')->default(false);
             $table->integer('response_time_ms')->nullable();
