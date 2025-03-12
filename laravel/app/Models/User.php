@@ -87,6 +87,11 @@ class User extends Authenticatable
         return $this->hasMany(DeckStudySession::class);
     }
 
+    public function userSetting()
+    {
+        return $this->hasOne(UserSetting::class);
+    }
+
     public function userOverallStat()
     {
         return $this->hasOne(UserOverallStat::class);

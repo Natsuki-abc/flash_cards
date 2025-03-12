@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('check_2')->default(false);
             $table->boolean('check_3')->default(false);
             $table->text('note')->nullable();
-            $table->integer('position');
+            $table->integer('position')->nullable();
 
             $table->softDeletes();
             $table->index('deleted_at');
