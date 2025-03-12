@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('decks', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('folder_id')->nullable()->constrained('folders');
+
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('profile_image_url')->nullable();
+            $table->text('description')->nullable();
+            $table->boolean('is_public')->default(false);
+            $table->index('is_public');
+            $table->integer('total_cards')->default(0);
 
             $table->softDeletes();
             $table->index('deleted_at');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('decks');
     }
 };

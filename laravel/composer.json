@@ -1,11 +1,12 @@
 {
-    "name": "laravel/laravel",
+    "name": "flash-cards/learn-hub",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A modern web application for creating, organizing and studying with digital flash cards. Features spaced repetition learning, multimedia support, and progress tracking.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "askedio/laravel-soft-cascade": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",

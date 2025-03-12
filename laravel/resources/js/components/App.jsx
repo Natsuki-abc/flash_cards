@@ -1,29 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './Dashboard';
+import DeckList from './DeckList';
+import DeckDetail from './DeckDetail';
+import StudyMode from './StudyMode';
+import Sidebar from './Sidebar';
 
-function App() {
-    const [count, setCount] = useState(0);
-
+export default function App() {
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
-                    <div className="card">
-                        <div className="card-header">React Component</div>
-
-                        <div className="card-body">
-                            <p>You clicked {count} times</p>
-                            <button
-                                className="btn btn-primary"
-                                onClick={() => setCount(count + 1)}
-                            >
-                                Click me
-                            </button>
-                        </div>
-                    </div>
+        <Router>
+            <div className="flex h-screen bg-gray-100">
+                <Sidebar />
+                <div className="flex-1 overflow-auto">
+                    <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/decks" element={<DeckList />} />
+                        <Route path="/decks/:id" element={<DeckDetail />} />
+                        <Route path="/study/:id" element={<StudyMode />} />
+                    </Routes>
                 </div>
             </div>
-        </div>
+        </Router>
     );
 }
-
-export default App;
