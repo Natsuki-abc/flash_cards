@@ -2,55 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\Flashcard;
 use App\Models\Folder;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FlashcardController extends Controller
+class CardController extends Controller
 {
     /**
      * フラッシュカード一覧を表示
      */
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     $query = Flashcard::whereHas('folder', function ($q) {
+    //         $q->where('user_id', Auth::id());
+    //     });
+
+    //     // タグによるフィルタリング
+    //     if ($request->has('tag')) {
+    //         $query->whereHas('tags', function ($q) use ($request) {
+    //             $q->where('name', $request->tag);
+    //         });
+    //     }
+
+    //     // チェックボックスによるフィルタリング
+    //     if ($request->has('check_1')) {
+    //         $query->where('check_1', true);
+    //     }
+    //     if ($request->has('check_2')) {
+    //         $query->where('check_2', true);
+    //     }
+    //     if ($request->has('check_3')) {
+    //         $query->where('check_3', true);
+    //     }
+
+    //     // 検索
+    //     if ($request->has('search')) {
+    //         $search = $request->search;
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('front_content', 'like', "%{$search}%")
+    //               ->orWhere('back_content', 'like', "%{$search}%");
+    //         });
+    //     }
+
+    //     $flashcards = $query->paginate(20);
+    //     $folders = Folder::where('user_id', Auth::id())->get();
+    //     $tags = Tag::where('user_id', Auth::id())->get();
+
+    //     return view('flashcards.index', compact('flashcards', 'folders', 'tags'));
+    // }
+
+    public function index()
     {
-        $query = Flashcard::whereHas('folder', function ($q) {
-            $q->where('user_id', Auth::id());
-        });
+        $cards = collect();
+        // Fetch flashcards from database
+        // This is just an example - adjust based on your actual data model
+        // $cards = Card::all()->map(function($card) {
+        //     return [
+        //         'id' => $card->id,
+        //         'question' => $card->front_content,
+        //         'answer' => $card->back_content,
+        //     ];
+        // });
 
-        // タグによるフィルタリング
-        if ($request->has('tag')) {
-            $query->whereHas('tags', function ($q) use ($request) {
-                $q->where('name', $request->tag);
-            });
+        // If you don't have a database yet, you can use this sample data:
+        if ($cards->isEmpty()) {
+            $cards = collect([
+                ['id' => 1, 'question' => '東京', 'answer' => 'Tokyo - Capital of Japan'],
+                ['id' => 2, 'question' => '大阪', 'answer' => 'Osaka - Major city in Japan'],
+                ['id' => 3, 'question' => '京都', 'answer' => 'Kyoto - Former capital of Japan'],
+                ['id' => 4, 'question' => '広島', 'answer' => 'Hiroshima - City in western Japan'],
+                ['id' => 5, 'question' => '札幌', 'answer' => 'Sapporo - Largest city in Hokkaido'],
+            ]);
         }
 
-        // チェックボックスによるフィルタリング
-        if ($request->has('check_1')) {
-            $query->where('check_1', true);
-        }
-        if ($request->has('check_2')) {
-            $query->where('check_2', true);
-        }
-        if ($request->has('check_3')) {
-            $query->where('check_3', true);
-        }
-
-        // 検索
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('front_content', 'like', "%{$search}%")
-                  ->orWhere('back_content', 'like', "%{$search}%");
-            });
-        }
-
-        $flashcards = $query->paginate(20);
-        $folders = Folder::where('user_id', Auth::id())->get();
-        $tags = Tag::where('user_id', Auth::id())->get();
-
-        return view('flashcards.index', compact('flashcards', 'folders', 'tags'));
+        return view('index', compact('cards'));
     }
 
     /**

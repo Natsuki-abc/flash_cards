@@ -7,10 +7,17 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.jsx', // 拡張子をjsxに変更
+                'resources/css/parts/card.css',
+                'resources/js/app.jsx',
             ],
             refresh: true,
         }),
-        react(), // Reactプラグインを
+        react(),
     ],
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: 'localhost'
+        },
+    },
 });
