@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('deck_study_sessions', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('profile_image_url')->nullable();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('deck_id')->constrained('decks');
+
+            $table->integer('cards_studied')->default(0);
+            $table->integer('cards_correct')->default(0);
 
             $table->softDeletes();
             $table->index('deleted_at');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('study_sessions');
     }
 };
